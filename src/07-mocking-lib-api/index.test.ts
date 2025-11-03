@@ -3,7 +3,7 @@ import { throttledGetDataFromApi } from './index';
 
 jest.mock('axios');
 jest.mock('lodash', () => ({
-  throttle: (fn: any) => fn,
+  throttle: <T extends (...args: unknown[]) => unknown>(fn: T) => fn,
 }));
 
 describe('throttledGetDataFromApi', () => {
@@ -14,7 +14,9 @@ describe('throttledGetDataFromApi', () => {
   };
 
   beforeEach(() => {
-    mockedAxios.create.mockReturnValue(mockAxiosInstance as any);
+    mockedAxios.create.mockReturnValue(
+      mockAxiosInstance as unknown as ReturnType<typeof axios.create>,
+    );
   });
 
   afterEach(() => {
